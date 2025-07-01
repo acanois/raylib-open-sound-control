@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.28)
-project(RaylibProject)
+
+set(PROJECT_NAME RaylibOSC)
+
+project(${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -27,6 +30,8 @@ else()
     message(STATUS "Using local ${LIB1}")
 endif()
 
+find_package(liblo CONFIG REQUIRED)
+
 # Adding our source files
 # Define PROJECT_SOURCES as a list of all source files
 file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/source/*.cpp")
@@ -35,7 +40,8 @@ file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/s
 set(PROJECT_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/source/")
 
 # Declaring our executable
-add_executable(${PROJECT_NAME})
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
 target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_INCLUDE})
 target_link_libraries(${PROJECT_NAME} PRIVATE ${LIB1})
+target_link_libraries(${PROJECT_NAME} PRIVATE liblo::liblo liblo::liblo_static)
