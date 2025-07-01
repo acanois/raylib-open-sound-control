@@ -4,13 +4,11 @@
 
 #pragma once
 
+#include <iostream>
 #include <lo/lo.h>
 #include <lo/lo_cpp.h>
 
-class OscHandler {
-public:
-    OscHandler() = default;
-
+struct OscHandler {
     static void initOsc() {
         lo::ServerThread st(9000);
         if (!st.is_valid()) {
@@ -24,10 +22,12 @@ public:
 
         std::atomic<int> received(0);
 
-        st.add_method("/midi_note", "i",
-                      [&received](lo_arg **argv, int) {
-                          std::cout << "midi_note (" << (++received) << "): " << argv[0]->i << std::endl;
-                      }
+        st.add_method(
+            "/midi_note",
+            "i",
+            [&received](lo_arg **argv, int) {
+                std::cout << "midi_note (" << (++received) << "): " << argv[0]->i << std::endl;
+            }
         );
 
         st.start();
