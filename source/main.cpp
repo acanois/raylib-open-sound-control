@@ -3,7 +3,7 @@
 
 
 int main() {
-    auto scene = std::make_shared<Scene>();
+    const auto scene = std::make_unique<Scene>();
     OscHandler::initOsc();
 
     scene->update();
