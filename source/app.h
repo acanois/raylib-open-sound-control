@@ -16,6 +16,7 @@ public:
     void update();
     void draw();
 
+private:
     static constexpr Vector2 screenDimensions {1280, 720 };
 
     Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
@@ -24,4 +25,5 @@ public:
     Camera3D mCamera;
 
     std::unique_ptr<OscHandler> mOscHandler = nullptr;
+    std::atomic<int> midiNote { 0 };
 };

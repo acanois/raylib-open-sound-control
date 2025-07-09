@@ -9,27 +9,31 @@
 
 class OscHandler {
 public:
-    OscHandler(const int port) : m_st(port) {
-        m_st.set_callbacks(
-            []() {
-                std::cout << "OscHandler started" << std::endl;
-            },
-            []() {
-                std::cout << "Thread cleanup" << std::endl;
-            }
-        );
+    OscHandler() : mSt(9000) {
+    }
 
-        m_st.add_method(
-            "/midi_note",
-            "i",
-            [](lo_arg **argv, int) {
-                std::cout << argv << std::endl;
-            }
-        );
+    void setCallbacks(
+        const std::function<void()> &input,
+        const std::function<void()> &cleanup) {
+        // Wrapper for set_callbacks()
+        mSt.set_callbacks(input, cleanup);
+    }
+
+    void addMethod(
+        const std::string &name,
+        const std::string &type,
+        const std::function<void(lo_arg **argv, int)> &func) {
+        // Wrapper for add_method()
+        mSt.add_method(name, type, func);
+    }
+
+    void startThread() {
+        // Wrapper for start()
+        mSt.start();
     }
 
 private:
-    lo::ServerThread m_st;
+    lo::ServerThread mSt;
 
-    std::atomic<int> m_midi_note;
+    std::atomic<int> mMidiNote;
 };
