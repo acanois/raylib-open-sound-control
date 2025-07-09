@@ -4,22 +4,24 @@
 
 #pragma once
 
+#include "osc_handler.h"
 
 #include <raylib.h>
 
-class Scene {
+class App {
 public:
-    Scene();
-    ~Scene();
+    App();
+    ~App();
 
     void update();
     void draw();
 
-    static constexpr int mScreenWidth = 1280;
-    static constexpr int mScreenHeight = 720;
+    static constexpr Vector2 screenDimensions {1280, 720 };
 
-    Camera3D mCamera = {};
     Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
-
     float mAngle = 0.f;
+
+    Camera3D mCamera;
+
+    std::unique_ptr<OscHandler> mOscHandler = nullptr;
 };
