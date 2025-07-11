@@ -9,7 +9,12 @@
 
 
 App::App()
-    : mCamera({
+    : mReactiveElement(std::make_unique<ReactiveElement>(
+          Vector3{0.f, 0.f, 0.f},
+          Vector3{1.f, 1.f, 1.f},
+          RED
+      )),
+      mCamera({
           Vector3{0.0f, 10.0f, 10.0f},
           Vector3{0.0f, 0.0f, 0.0f},
           Vector3{0.0f, 1.0f, 0.0f},
@@ -20,16 +25,17 @@ App::App()
     InitWindow(screenDimensions.x, screenDimensions.y, "Raylib - OSC");
     SetTargetFPS(60);
 
-    auto inputFunc = []() { std::cout << "OscHandler started" << std::endl; };
-    auto cleanupFunc = []() { std::cout << "OscHandler stopped" << std::endl; };
-    mOscHandler->setCallbacks(inputFunc, cleanupFunc);
-
-    const auto pathName = "/midi_note";
-    const auto messageType = "i";
-    auto intHandler = [](lo_arg **argv, int) { std::cout << argv[0]->i << std::endl; };
-    mOscHandler->addMethod(pathName, messageType, intHandler);
-
-    mOscHandler->startThread();
+    // Disabled so lack of input doesn't crash the app
+    // auto inputFunc = []() { std::cout << "OscHandler started" << std::endl; };
+    // auto cleanupFunc = []() { std::cout << "OscHandler stopped" << std::endl; };
+    // mOscHandler->setCallbacks(inputFunc, cleanupFunc);
+    //
+    // const auto pathName = "/midi_note";
+    // const auto messageType = "i";
+    // auto intHandler = [](lo_arg **argv, int) { std::cout << argv[0]->i << std::endl; };
+    // mOscHandler->addMethod(pathName, messageType, intHandler);
+    //
+    // mOscHandler->startThread();
 }
 
 App::~App() {
@@ -52,7 +58,8 @@ void App::draw() {
         BeginDrawing();
         ClearBackground(BLACK);
         BeginMode3D(mCamera);
-        DrawCube(cubePosition, 2.0f, 2.0f, 2.0f, RED);
+        // DrawCube(cubePosition, 2.0f, 2.0f, 2.0f, RED);
+        mReactiveElement->draw();
         DrawCubeWires(cubePosition, 2.0f, 2.0f, 2.0f, MAROON);
         DrawGrid(10, 1.0f);
         EndMode3D();
